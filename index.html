@@ -7,18 +7,16 @@
   <meta name="keywords" content="e-catalogue, products, images, download" />
   <title>Krishnan Doors</title>
   
-  <!-- Optimized CSS and JS -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com" defer></script>
   <style>
     body {
       font-family: sans-serif;
     }
-
     .image-card {
       position: relative;
       overflow: hidden;
     }
-
     html {
       text-size-adjust: 100%;
     }
@@ -55,9 +53,14 @@
         type="text"
         id="searchInput"
         placeholder="Search by serial number (e.g., vmk01)"
-        class="w-full p-3 mb-6 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        class="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         aria-label="Search product by serial number"
       />
+
+      <!-- No results message -->
+      <p id="noResults" class="hidden text-center text-red-600 font-medium mb-4">
+        No results found. Please check the serial number.
+      </p>
 
       <!-- Gallery -->
       <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-6"></div>
@@ -78,20 +81,21 @@
     ];
 
     const gallery = document.getElementById("gallery");
+    const noResults = document.getElementById("noResults");
 
     function createImageCard(serial, index) {
       const loadingType = index < 4 ? "eager" : "lazy";
 
       return `
         <div class="bg-white rounded-2xl shadow hover:shadow-xl transition-transform hover:-translate-y-1 duration-300 image-card">
-          <a href="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-desktop.webp" target="_blank">
+          <a href="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-desktop.webp" target="_blank">
             <img 
-              src="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-mobile.webp"
+              src="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-mobile.webp"
               srcset="
-                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-mobile.webp 480w, 
-                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-desktop.webp 768w, 
-                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-desktop.webp 1280w, 
-                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-desktop.webp 1920w"
+                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-mobile.webp 480w, 
+                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-desktop.webp 768w, 
+                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-desktop.webp 1280w, 
+                https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial}-desktop.webp 1920w"
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               alt="Product ${serial}"
               class="rounded-t-2xl w-full object-cover hover:brightness-105 transition"
@@ -104,8 +108,13 @@
     }
 
     function renderGallery(filter = "") {
-      gallery.innerHTML = imageSerials
-        .filter(serial => serial.toLowerCase().includes(filter.toLowerCase()))
+      const matches = imageSerials.filter(serial =>
+        serial.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      noResults.classList.toggle("hidden", matches.length > 0);
+
+      gallery.innerHTML = matches
         .map((serial, index) => createImageCard(serial, index))
         .join("");
     }
@@ -117,7 +126,6 @@
       menu.classList.toggle("hidden");
     }
 
-    // Initial render
     document.addEventListener("DOMContentLoaded", () => renderGallery());
   </script>
 </body>
