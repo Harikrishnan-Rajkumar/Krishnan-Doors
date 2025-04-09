@@ -83,14 +83,14 @@
       return `
         <div class="bg-white rounded-2xl shadow hover:shadow-xl transition-transform hover:-translate-y-1 duration-300 image-card">
           <!-- Clicking the image opens it in full size -->
-          <a href="Images/${serial.toLowerCase()}-desktop.webp" target="_blank">
+          <a href="https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-desktop.webp" target="_blank">
             <img 
-              src="Images/${serial.toLowerCase()}-mobile.webp"
+              src="https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-mobile.webp"
               srcset="
-                Images/${serial.toLowerCase()}-mobile.webp 480w, 
-                Images/${serial.toLowerCase()}-desktop.webp 768w, 
-                Images/${serial.toLowerCase()}-desktop.webp 1280w, 
-                Images/${serial.toLowerCase()}-desktop.webp 1920w"
+                https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-mobile.webp 480w, 
+                https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-desktop.webp 768w, 
+                https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-desktop.webp 1280w, 
+                https://github.com/Harikrishnan-Rajkumar/Krishnan-Doors/raw/main/Images/${serial.toLowerCase()}-desktop.webp 1920w"
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               alt="Product ${serial}"
               class="rounded-t-2xl w-full object-cover hover:brightness-105 transition"
@@ -118,18 +118,6 @@
 
     // Initial render
     document.addEventListener("DOMContentLoaded", () => renderGallery());
-
-    // Set HTTP headers for better performance and security (not needed on GitHub Pages but kept for structure)
-    if (typeof fetch !== "undefined") {
-      fetch("/").then(() => {
-        const metaTags = document.getElementsByTagName("meta");
-        for (let meta of metaTags) {
-          if (meta.name === "Content-Type") {
-            meta.content = "text/html; charset=UTF-8";
-          }
-        }
-      });
-    }
   </script>
 </body>
 </html>
