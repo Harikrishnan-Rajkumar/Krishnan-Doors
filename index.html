@@ -14,33 +14,13 @@
       font-family: sans-serif;
     }
 
-    /* Ensure images are properly sized and centered */
     .image-card {
       position: relative;
       overflow: hidden;
     }
 
     html {
-      text-size-adjust: 100%; /* Ensures text scaling is optimized */
-    }
-
-    /* Adjustments for larger screens */
-    @media (min-width: 1280px) {
-      .container {
-        max-width: 1200px; /* Adjust max width for very large screens */
-      }
-    }
-
-    @media (min-width: 1536px) {
-      .container {
-        max-width: 1400px;
-      }
-    }
-
-    @media (min-width: 1920px) {
-      .container {
-        max-width: 1600px;
-      }
+      text-size-adjust: 100%;
     }
   </style>
 </head>
@@ -66,7 +46,7 @@
 
   <!-- Main Content -->
   <main class="flex-grow">
-    <div class="container p-4 mx-auto">
+    <div class="container p-4 mx-auto max-w-screen-xl">
       <!-- Heading -->
       <h1 class="text-3xl md:text-4xl font-bold mb-6 text-center text-gray-800 hover:text-blue-500 transition">Krishnan Doors</h1>
 
@@ -80,7 +60,7 @@
       />
 
       <!-- Gallery -->
-      <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6"></div>
+      <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-6"></div>
     </div>
   </main>
 
@@ -93,17 +73,17 @@
   </footer>
 
   <script>
-    // Image serials list for scalable gallery
     const imageSerials = [
       "vmk01", "vmk02", "vmk03", "vmk04", "vmk05"
     ];
 
     const gallery = document.getElementById("gallery");
 
-    function createImageCard(serial) {
+    function createImageCard(serial, index) {
+      const loadingType = index < 4 ? "eager" : "lazy";
+
       return `
         <div class="bg-white rounded-2xl shadow hover:shadow-xl transition-transform hover:-translate-y-1 duration-300 image-card">
-          <!-- Clicking the image opens it in full size -->
           <a href="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-desktop.webp" target="_blank">
             <img 
               src="https://raw.githubusercontent.com/Harikrishnan-Rajkumar/Krishnan-Doors/refs/heads/main/Images/${serial.toLowerCase()}-mobile.webp"
@@ -115,7 +95,7 @@
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               alt="Product ${serial}"
               class="rounded-t-2xl w-full object-cover hover:brightness-105 transition"
-              loading="lazy"
+              loading="${loadingType}"
               decoding="async"
             />
           </a>
@@ -126,7 +106,7 @@
     function renderGallery(filter = "") {
       gallery.innerHTML = imageSerials
         .filter(serial => serial.toLowerCase().includes(filter.toLowerCase()))
-        .map(serial => createImageCard(serial))
+        .map((serial, index) => createImageCard(serial, index))
         .join("");
     }
 
