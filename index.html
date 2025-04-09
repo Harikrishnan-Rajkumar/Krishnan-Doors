@@ -10,7 +10,9 @@
   <!-- Optimized CSS and JS -->
   <script src="https://cdn.tailwindcss.com" defer></script>
   <style>
-    body { font-family: sans-serif; }
+    body {
+      font-family: sans-serif;
+    }
 
     /* Ensure images are properly sized and centered */
     .image-card {
@@ -20,6 +22,25 @@
 
     html {
       text-size-adjust: 100%; /* Ensures text scaling is optimized */
+    }
+
+    /* Adjustments for larger screens */
+    @media (min-width: 1280px) {
+      .container {
+        max-width: 1200px; /* Adjust max width for very large screens */
+      }
+    }
+
+    @media (min-width: 1536px) {
+      .container {
+        max-width: 1400px;
+      }
+    }
+
+    @media (min-width: 1920px) {
+      .container {
+        max-width: 1600px;
+      }
     }
   </style>
 </head>
@@ -45,7 +66,7 @@
 
   <!-- Main Content -->
   <main class="flex-grow">
-    <div class="max-w-7xl mx-auto p-4">
+    <div class="container p-4 mx-auto">
       <!-- Heading -->
       <h1 class="text-3xl md:text-4xl font-bold mb-6 text-center text-gray-800 hover:text-blue-500 transition">Krishnan Doors</h1>
 
@@ -59,7 +80,7 @@
       />
 
       <!-- Gallery -->
-      <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+      <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6"></div>
     </div>
   </main>
 
