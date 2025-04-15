@@ -3,56 +3,63 @@ const serials = [
   ...Array.from({ length: 9 }, (_, i) => `vmk10${i + 1}`)
 ];
 
-const imageModal = document.getElementById('imageModal');
-const modalImage = document.getElementById('modalImage');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
 let currentIndex = 0;
 
-function showImage() {
-  const serial = serials[currentIndex];
-  modalImage.onerror = () => {
-    modalImage.src = 'fallback.webp';
-  };
-  modalImage.src = `https://ik.imagekit.io/KrishnanDoors/${serial}.webp`;
-  history.replaceState(null, '', `#${serial}`);
-}
-
-prevBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + serials.length) % serials.length;
-  showImage();
-});
-
-nextBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % serials.length;
-  showImage();
-});
-
-imageModal.addEventListener('show.bs.modal', event => {
-  const triggerImg = event.relatedTarget;
-  if (triggerImg) {
-    currentIndex = parseInt(triggerImg.getAttribute('data-index'));
-    showImage();
-  }
-});
-
-imageModal.addEventListener('hidden.bs.modal', () => {
-  history.replaceState(null, '', window.location.pathname);
-});
-
-function loadImageFromHash() {
-  const hash = window.location.hash.substring(1);
-  if (serials.includes(hash)) {
-    currentIndex = serials.indexOf(hash);
-    showImage();
-    const modal = new bootstrap.Modal(imageModal);
-    modal.show();
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+  const imageModal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modalImage');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
   const gallery = document.querySelector('.gallery');
   const searchInput = document.getElementById('searchInput');
+
+  if (!gallery || !searchInput || !imageModal || !modalImage || !prevBtn || !nextBtn) {
+    console.error('One or more required DOM elements are missing.');
+    return;
+  }
+
+  function showImage() {
+    const serial = serials[currentIndex];
+    modalImage.onerror = () => {
+      modalImage.src = 'fallback.webp';
+    };
+    modalImage.src = `https://ik.imagekit.io/KrishnanDoors/${serial}.webp`;
+    history.replaceState(null, '', `#${serial}`);
+  }
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + serials.length) % serials.length;
+    showImage();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % serials.length;
+    showImage();
+  });
+
+  imageModal.addEventListener('show.bs.modal', event => {
+    const triggerImg = event.relatedTarget;
+    if (triggerImg && triggerImg.hasAttribute('data-index')) {
+      currentIndex = parseInt(triggerImg.getAttribute('data-index'), 10);
+      if (!isNaN(currentIndex)) {
+        showImage();
+      }
+    }
+  });
+
+  imageModal.addEventListener('hidden.bs.modal', () => {
+    history.replaceState(null, '', window.location.pathname);
+  });
+
+  function loadImageFromHash() {
+    const hash = window.location.hash.substring(1);
+    if (serials.includes(hash)) {
+      currentIndex = serials.indexOf(hash);
+      showImage();
+      const modal = new bootstrap.Modal(imageModal);
+      modal.show();
+    }
+  }
 
   const getFirstRowCount = () => {
     const width = window.innerWidth;
@@ -76,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
       wrapper.setAttribute('aria-label', `Preview of ${serial}`);
       wrapper.dataset.index = index;
 
-      // Keyboard support for modal open
       wrapper.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -115,12 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadImageFromHash();
 
-  // Handle keyboard navigation in modal (ArrowLeft for previous, ArrowRight for next)
   document.addEventListener('keydown', (e) => {
-    if (imageModal.classList.contains('show')) { // Check if modal is open
-      if (e.key === 'ArrowLeft') { // Left arrow key
+    if (imageModal.classList.contains('show')) {
+      if (e.key === 'ArrowLeft') {
         prevBtn.click();
-      } else if (e.key === 'ArrowRight') { // Right arrow key
+      } else if (e.key === 'ArrowRight') {
         nextBtn.click();
       }
     }
